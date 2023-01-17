@@ -9,7 +9,9 @@ In here you will find:
 
 - `create-cluster.sh`, a shell script to create a `k3d` cluster and prep it by
   running `setup-cluster.sh`.
-
+- `vault/install-vault.sh`, a shell script to install a vault cluster and initialize it
+- `vault/configure-vault-and-cert-manager.sh`, a shell script to configure vault for kubernetes auth and PKI for linkerd. Also installs cert-manager to manage the linkerd trust anchor.
+- `vault/unsseal-vault.sh`, a helper script that will unseal a previously initialized vault that has restarted and been sealed
 - `setup-cluster.sh`, a shell script to set up an empty cluster with [Linkerd],
   [Emissary-ingress], and the Faces app.
    - These things are installed in a demo configuration: read and think
@@ -32,20 +34,20 @@ To try this yourself:
 - If you already have an empty cluster to use, you can run `bash setup-cluster.sh`
   to initialize it.
 
+- Create an entry in your /etc/hosts that points `demo.cluster.local` to `127.0.0.1`
+- If you want to avoid browser errors, grab the CA from vault and add it to your local trust store.
+  Save it to a file with `curl localhost:8200/v1/pki/ca > ~/tmp/ca.pem`
+
 - Play around!! Assuming that you're using k3d, the Faces app is reachable at
-  http://localhost/faces/ and the Linkerd Viz dashboard is available at
-  http://localhost/
-
-   - If you're not using k3d, instead of `localhost` use the IP or DNS name of
-     the `emissary-ingress` service in the `emissary` namespace. 
-
-   - Remember, HTTPS is **not** configured.
+  http://demo.cluster.local/faces/ and the Linkerd Viz dashboard is available at
+  http://demo.cluster.local/
 
 - More to come here!
 
 [Linkerd]: https://linkerd.io
 [Emissary-ingress]: https://www.getambassador.io/docs/emissary/
-
+[Polaris]: https://polaris.docs.fairwinds.com
+[Cert Manager]: https://cert-manager.io
 ---
 
 #### DEMO HOOKS
